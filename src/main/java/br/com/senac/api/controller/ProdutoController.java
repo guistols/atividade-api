@@ -38,4 +38,14 @@ public class ProdutoController {
             return ResponseEntity.badRequest().body(null);
         }
     }
+
+    @DeleteMapping("/deletar-produto/{id}")
+    public ResponseEntity<Void>deletarProduto(@PathVariable Long id) {
+        try {
+            produtoService.deletarProduto(id);
+            return ResponseEntity.ok(null);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
 }

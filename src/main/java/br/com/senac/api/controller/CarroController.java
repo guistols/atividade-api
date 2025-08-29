@@ -38,4 +38,14 @@ public class CarroController {
             return ResponseEntity.badRequest().body(null);
         }
     }
+
+    @DeleteMapping("/deletar-carro/{id}")
+    public ResponseEntity<Void> deletarCarro(@PathVariable Long id){
+        try{
+            carroService.deletarCarro(id);
+            return ResponseEntity.ok(null);
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
 }

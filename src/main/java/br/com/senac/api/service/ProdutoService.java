@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 @Service
 public class ProdutoService {
@@ -16,10 +17,7 @@ public class ProdutoService {
     private ProdutoRepository produtoRepository;
 
     public Produto adicionarProduto(ProdutoRequestDTO produto){
-        Produto produtoPersist = new Produto();
-
-        produtoPersist.setDescricao(produto.getDescricao());
-        produtoPersist.setNome(produto.getNome());
+        Produto produtoPersist = produtoRequestDtoParaProduto(produto);
 
         return produtoRepository.save(produtoPersist);
     }
@@ -33,13 +31,29 @@ public class ProdutoService {
             throw new Exception("Registro não encontrado");
         }
 
-        Produto produtoPersist = new Produto();
+        Produto produtoPersist = this.produtoRequestDtoParaProduto(produto);
 
-        produtoPersist.setNome(produto.getNome());
-        produtoPersist.setDescricao(produto.getDescricao());
 
         produtoPersist.setId(id);
 
         return produtoRepository.save(produtoPersist);
+    }
+
+    public void deletarProduto(Long id) throws Exception{
+        if(produtoRepository.existsById(id)==false){
+            throw new Exception("Regsitro não encontrado");
+        }
+
+        produtoRepository.deleteById(id);
+    }
+
+
+    private Produto produtoRequestDtoParaProduto(ProdutoRequestDTO in){
+        Produto out = new Produto();
+
+        out.setNome(in.getNome());
+        out.setDescricao(in.getDescricao());
+
+        return out;
     }
 }

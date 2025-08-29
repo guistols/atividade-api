@@ -14,17 +14,14 @@ public class CarroService {
     @Autowired
     private CarroRepository carroRepository;
 
-    public Carro adicionarCarro(CarroRequestDTO carro){
-        Carro carroPersist = new Carro();
-
-        carroPersist.setMarca(carro.getMarca());
-        carroPersist.setModelo(carro.getModelo());
-
-        return carroRepository.save(carroPersist);
-    }
-
     public List<Carro> listarCarro(){
         return carroRepository.findAll();
+    }
+
+    public Carro adicionarCarro(CarroRequestDTO carro){
+        Carro carroPersist = this.carroRequestDtoParaCarro(carro);
+
+        return carroRepository.save(carroPersist);
     }
 
     public Carro atualizarCarro(Long id, CarroRequestDTO carro) throws Exception {
@@ -32,14 +29,27 @@ public class CarroService {
             throw new Exception("Registro Não encontrado");
         }
 
-        Carro carroPersist = new Carro();
-
-        carroPersist.setModelo(carro.getModelo());
-        carroPersist.setMarca(carro.getMarca());
+        Carro carroPersist = this.carroRequestDtoParaCarro(carro);
 
         carroPersist.setId(id);
 
         return carroRepository.save(carroPersist);
+    }
+
+    public void deletarCarro(Long id) throws Exception {
+        if(carroRepository.existsById(id)==false){
+            throw new Exception("Registro não encontrado");
+        }
+        carroRepository.deleteById(id);
+    }
+
+    private Carro carroRequestDtoParaCarro (CarroRequestDTO in){
+        Carro out = new Carro();
+
+        out.setModelo(in.getModelo());
+        out.setMarca(in.getMarca());
+
+        return out;
     }
 
 }

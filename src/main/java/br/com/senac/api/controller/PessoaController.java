@@ -21,7 +21,6 @@ public class PessoaController {
     @PostMapping("/adicionar-pessoa")
     public ResponseEntity<Pessoa>adicionarPessoa(@RequestBody PessoaRequestDTO pessoa){
         System.out.println(pessoa.toString());
-        pessoaService.adicionarPessoa(pessoa);
         return ResponseEntity.ok(pessoaService.adicionarPessoa(pessoa));
     }
 
@@ -30,6 +29,14 @@ public class PessoaController {
         return ResponseEntity.ok(pessoaService.listarPessoa());
     }
 
+    @GetMapping("/listar-pessoa-id/{id}")
+    public ResponseEntity<Pessoa>listarPessoaId(@PathVariable Long id){
+        try {
+            return ResponseEntity.ok(pessoaService.listarPessoaId(id));
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
     @PutMapping("/atualizar-pessoa/{id}")
     public ResponseEntity<Pessoa>atualizarPessoa(@PathVariable Long id, @RequestBody PessoaRequestDTO pessoa){
         try{
@@ -38,4 +45,15 @@ public class PessoaController {
             return ResponseEntity.badRequest().body(null);
         }
     }
+
+    @DeleteMapping("/deletar-pessoa/{id}")
+    public ResponseEntity<Void> deletarPessoa(@PathVariable Long id){
+        try{
+            pessoaService.deletarPessoa(id);
+            return ResponseEntity.ok(null);
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
+
 }
