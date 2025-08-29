@@ -3,6 +3,7 @@ package br.com.senac.api.controller;
 import br.com.senac.api.controller.dto.PessoaRequestDTO;
 import br.com.senac.api.model.Pessoa;
 import br.com.senac.api.service.PessoaService;
+import br.com.senac.api.utils.ResponseUtil;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -47,12 +48,13 @@ public class PessoaController {
     }
 
     @DeleteMapping("/deletar-pessoa/{id}")
-    public ResponseEntity<Void> deletarPessoa(@PathVariable Long id){
+    public ResponseEntity<?> deletarPessoa(@PathVariable Long id){
         try{
             pessoaService.deletarPessoa(id);
             return ResponseEntity.ok(null);
         }catch (Exception e){
-            return ResponseEntity.badRequest().body(null);
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(ResponseUtil.response(e.getMessage()));
         }
     }
 
